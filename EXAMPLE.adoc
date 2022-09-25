@@ -1,0 +1,394 @@
+= Asciidoc for Netbeans (Example)
+FICHET Philippe <philippe.fichet@laposte.net>
+V1.0-SNAPSHOT
+:toc: left
+:toc-title: Table of content
+:toclevels: 5
+:sectnums: true
+:icons: font
+:replace-me: I've been replaced!
+:stem:
+
+== Source code
+
+.Source code Main with callout
+[source,java]
+----
+public class Main { <1> 
+}
+----
+<1> Main class
+
+.Another source code
+[source,java]
+----
+public class Testt {
+}
+----
+
+== Listing
+
+.Linsting example
+[listing]
+This is an example of a paragraph assigned
+the `listing` style in an attribute list.
+Notice that the monospace marks are
+preserved in the output.
+
+.Linsting example block
+----
+This is a _delimited listing block_.
+
+The content inside is displayed as <pre> text.
+----
+
+.Delimited listing block with custom substitutions syntax
+[subs="+attributes"]
+----
+This is a _delimited listing block_
+with the `subs` attribute assigned
+the incremental value `+attributes`.
+This attribute reference:
+
+{replace-me}
+
+will be replaced with the attribute's
+value when rendered.
+----
+
+== Literal
+
+.Indicate literal text using an indent
+ ~/secure/vault/defops
+
+.Literal style syntax
+[literal]
+error: 1954 Forbidden search
+absolutely fatal: operation lost in the dodecahedron of doom
+Would you like to try again? y/n
+
+.Delimited literal block syntax
+....
+Kismet: Where is the *defensive operations manual*?
+
+Computer: Calculating ...
+Can not locate object.
+You are not authorized to know it exists.
+
+Kismet: Did the werewolves tell you to say that?
+
+Computer: Calculating ...
+....
+
+== Equations and Formulas (STEM)
+
+stem:[sqrt(4) = 2]  
+
+Water (stem:[H_2O]) is a critical component.
+
+A matrix can be written as stem:[[[a,b\],[c,d\]\]((n),(k))].
+
+.Delimited stem block syntax
+[stem]
+++++
+sqrt(4) = 2
+++++
+
+.Inline latexmath macro syntax
+latexmath:[C = \alpha + \beta Y^{\gamma} + \epsilon]
+
+.An e-xciting limit with LaTeX!
+[stem]
+++++
+\lim_{n \to \infty}\frac{n}{\sqrt[n]{n!}} = {\large e}
+++++
+
+.A basic square root with AsciiMath
+[asciimath]
+++++
+sqrt(4) = 2
+++++
+
+== Open Blocks
+
+.Open block syntax
+--
+An open block can be an anonymous container,
+or it can masquerade as any other block.
+--
+
+== Collapsible Blocks
+
+[%collapsible]
+====
+This content is only revealed when the user clicks the block title.
+====
+
+[example%collapsible]
+This content is only revealed when the user clicks the block title.
+
+.Click to reveal the answer
+[%collapsible]
+====
+This is the answer.
+====
+
+.Too much detail? Click here.
+[%collapsible%open]
+====
+This content is revealed by default.
+
+If it's taking up too much space, the reader can hide it.
+====
+
+.Show stacktrace
+[%collapsible]
+====
+....
+Error: Content repository not found (url: https://git.example.org/repo.git)
+    at transformGitCloneError
+    at git.clone.then.then.catch
+Caused by: HttpError: HTTP Error: 401 HTTP Basic: Access Denied
+    at GitCredentialManagerStore.rejected
+    at fill.then
+....
+====
+
+== Sidebar
+
+.Simple sidebar example
+[sidebar]
+Sidebars are used to visually separate auxiliary bits of content
+that supplement the main text.
+
+.Block sidebar example
+****
+Sidebars are used to visually separate auxiliary bits of content
+that supplement the main text.
+
+TIP: They can contain any type of content.
+
+.Source code block in a sidebar
+[source,js]
+----
+const { expect, expectCalledWith, heredoc } = require('../test/test-utils')
+----
+****
+
+== Example
+
+.Optional title
+[example]
+This is an example of an example block.
+
+.Onomatopoeia
+====
+The book hit the floor with a *thud*.
+
+He could hear doves *cooing* in the pine trees`' branches.
+====
+
+== Diagram
+
+=== PlantUML
+
+.Plant uml demo png (show real file in target/asciidoc4netbeans)
+[plantuml,,png]
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....
+
+.Plant uml demo svg (show real file in target/asciidoc4netbeans)
+[plantuml,,svg]
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....
+
+=== Ditaa
+
+.Ditaa diagram demo
+[ditaa]
+....
+    +--------+   +-------+    +-------+
+    |        | --+ ditaa +--> |       |
+    |  Text  |   +-------+    |diagram|
+    |Document|   |!magic!|    |       |
+    |     {d}|   |       |    |       |
+    +---+----+   +-------+    +-------+
+        :                         ^
+        |       Lots of work      |
+        +-------------------------+
+....
+
+== Quote
+
+[quote,attribution,citation title and information]
+Quote or excerpt text
+
+.Quote example
+.After landing the cloaked Klingon bird of prey in Golden Gate park: 
+[quote,Captain James T. Kirk,Star Trek IV: The Voyage Home]   
+Everybody remember where we parked.
+
+.Block quote
+[quote,Monty Python and the Holy Grail]
+____
+Dennis: Come and see the violence inherent in the system. Help! Help! I'm being repressed!
+
+King Arthur: Bloody peasant!
+
+Dennis: Oh, what a giveaway! Did you hear that? Did you hear that, eh? That's what I'm on about! Did you see him repressing me? You saw him, Didn't you?
+____
+
+.Quoted paragraph
+"I hold it that a little rebellion now and then is a good thing,
+and as necessary in the political world as storms in the physical."
+-- Thomas Jefferson, Papers of Thomas Jefferson: Volume 11
+
+
+.Markdown-style blockquotes
+> I hold it that a little rebellion now and then is a good thing,
+> and as necessary in the political world as storms in the physical.
+> -- Thomas Jefferson, Papers of Thomas Jefferson: Volume 11
+
+.Markdown-style blockquote containing block content
+> > What's new?
+>
+> I've got Markdown in my AsciiDoc!
+>
+> > Like what?
+>
+> * Blockquotes
+> * Headings
+> * Fenced code blocks
+>
+> > Is there more?
+>
+> Yep. AsciiDoc and Markdown share a lot of common syntax already.
+
+== Verse
+
+[verse,Carl Sandburg, two lines from the poem Fog]
+The fog comes
+on little cat feet.
+
+[verse,Carl Sandburg,Fog]
+____
+The fog comes
+on little cat feet.
+
+It sits looking
+over harbor and city
+on silent haunches
+and then moves on.
+____
+
+== Admonition
+
+.Admonition NOTE paragraph syntax
+NOTE: note example
+
+.Admonition TIP paragraph syntax
+TIP: note example
+
+.Admonition CAUTION paragraph syntax
+CAUTION: note example
+
+.Admonition paragraph syntax
+WARNING: Wolpertingers are known to nest in server racks.  
+Enter at your own risk.
+
+.Admonition block syntax
+[IMPORTANT] 
+.Feeding the Werewolves
+====
+While werewolves are hardy community members, keep in mind the following dietary concerns:
+
+. They are allergic to cinnamon.
+. More than two glasses of orange juice in 24 hours makes them howl in harmony with alarms and sirens.
+. Celery makes them sad.
+====
+
+== Lists
+
+.Unordered list
+* West wood maze
+** Maze heart
+*** Reflection pool
+** Secret exit
+* Untracked file in git repository
+
+//-
+
+* Untracked file in git repository
+
+[start=4]
+.Ordered list
+. Protons
+. Electrons
+. Neutrons
+
+.Checklists
+* [*] checked
+* [x] also checked
+* [ ] not checked
+* normal list item
+
+.Description Lists
+CPU:: The brain of the computer.
+Hard drive:: Permanent storage for operating system and/or user files.
+RAM:: Temporarily stores information the CPU uses during operation.
+Keyboard:: Used to enter text or control items on the screen.
+Mouse:: Used to point to and select items on your computer screen.
+Monitor:: Displays information in visual form using text and graphics.
+
+.Description Lists (horizontal)
+[horizontal]
+CPU:: The brain of the computer.
+Hard drive:: Permanent storage for operating system and/or user files.
+RAM:: Temporarily stores information the CPU uses during operation.
+
+== Foonotes
+
+The hail-and-rainbow protocol can be initiated at five levels:
+
+. doublefootnote:[The double hail-and-rainbow level makes my toes tingle.]  
+. tertiary
+. supernumerary
+. supermassive
+. apocalyptic
+
+== Table
+
+.Table example with header, footer and stripes rows
+[width="100%",options="header,footer",stripes=even]
+|===
+| Header 1 | Header 2 | Header 3
+|   cell 1 |   cell 2 | cell 3
+|   cell 4 |   cell 5 | cell 6
+|   cell 7 |   cell 8 | cell 9
+|  cell 10 |  cell 11 | cell 12
+| footer 1 | footer 2 | footer 3
+|===
+
+== Links
+
+.xref example with link to file in netbeans
+xref:examples/linkExample.adoc#test[xref example with link to file in netbeans]
+
+https://docs.asciidoctor.org/asciidoc/latest/[Asciidoc documentation] +
+https://asciidoctor.org/docs/asciidoc-recommended-practices/[AsciiDoc Recommended Practices] +

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Templates">
+        <folder name="Other">
+            <file name="AsciidocTemplate.adoc" url="AsciidocTemplate.adoc">
+                <attr name="displayName" bundlevalue="com.github.philippefichet.asciidoc4netbeans.Bundle#Templates/Other/AsciidocTemplate.adoc"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="UI">
+        <folder name="Runtime">
+            <!-- Don't use @ServicesTabNodeRegistration to not use LazyNode and bind immediatly icon to real status -->
+            <file name="com-github-philippefichet-asciidoc4netbeans-ui-nodes-AsciidocEngineNode.instance">
+                <attr name="iconResource" stringvalue="com/github/philippefichet/asciidoc4netbeans/resources/asciidoc_icon_stop.png"/>
+                <attr name="name" stringvalue="Asciidoctor"/>
+                <attr bundlevalue="com.github.philippefichet.asciidoc4netbeans.ui.nodes.Bundle#Asciidoc_Root_Node_Name" name="displayName"/>
+                <attr methodvalue="com.github.philippefichet.asciidoc4netbeans.ui.nodes.AsciidocEngineNode.getInstance" name="original"/>
+                <attr bundlevalue="com.github.philippefichet.asciidoc4netbeans.ui.nodes.Bundle#Asciidoc_Root_Node_Short_Description" name="shortDescription"/>
+                <attr intvalue="500" name="position"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

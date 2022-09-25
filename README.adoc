@@ -1,0 +1,31 @@
+= Asciidoc for Netbeans
+:toc: left
+:toc-title: Sommaire
+:toclevels: 5
+:sectnums: true
+:icons: font
+FICHET Philippe
+1.0-SNAPSHOT
+
+== Requirement
+
+Java 11 +
+Netbeans 13.0+ +
+Netbeans JavaFX implementation module
+
+== Features
+
+- Based on `asciidoctorj`
+- Syntax highlighting (based on TextMate grammar)
+- Preview in Netbeans
+- Support PlantUML diagram
+- Web server to show in browser
+- Follow link to file in Netbeans
+- Dark mode support
+- Show engine status in `Services` tab
+- Search best output directory for rendering
+
+== Resources
+
+https://docs.asciidoctor.org/asciidoc/latest/[asciidoc] +
+https://github.com/asciidoctor/asciidoctorj[asciidoctorj] +

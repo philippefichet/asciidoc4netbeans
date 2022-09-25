@@ -1,0 +1,24 @@
+/* https://openjfx.io/javadoc/11/javafx.graphics/javafx/scene/doc-files/cssref.html */
+/* https://github.com/openjdk/jfx/blob/master/modules/javafx.controls/src/main/resources/com/sun/javafx/scene/control/skin/caspian/caspian.css */
+.root {
+    -fx-base: rgb(169,183,198);
+    -fx-color: rgb(169,183,198);
+    -fx-text-base-color: -fx-color;
+    -fx-background: rgb(43,43,43);
+    -fx-control-inner-background: rgb(21,21,21);
+    -fx-accent: rgb(33, 66, 121);
+    -fx-text-fill: rgb(169,183,198);
+    -fx-dark-text-color: #FFFFFF;
+    -fx-mid-text-color: #292929;
+    -fx-base-border-color: #4c4e50;
+}
+
+.context-menu {
+    -fx-color: -fx-base;
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-base-border-color;
+}
+
+.web-view {
+    -fx-page-fill: -fx-background;
+}

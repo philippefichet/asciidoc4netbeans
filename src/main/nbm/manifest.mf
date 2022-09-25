@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Layer: com/github/philippefichet/asciidoc4netbeans/layer.xml
+OpenIDE-Module-Localizing-Bundle: com/github/philippefichet/asciidoc4netbeans/Bundle.properties
+OpenIDE-Module-Requires: org.openide.modules.jre.JavaFX

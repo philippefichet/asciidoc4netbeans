@@ -1,0 +1,10 @@
+= Link Example
+FICHET Philippe <philippe.fichet@laposte.net>
+V1.0-SNAPSHOT
+:toc: left
+:toc-title: Table of content
+:toclevels: 5
+:sectnums: true
+:icons: font
+
+Just example to open this file in Netbeans from Asciidoc preview
