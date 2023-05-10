@@ -17,6 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
+
+/**
+ * Asciidoc integration for Netbeans
+ * Register template for new asciidoc file
+ */
 @TemplateRegistration(folder = "Other", content = "AsciidocTemplate.adoc")
 package com.github.philippefichet.asciidoc4netbeans;
 

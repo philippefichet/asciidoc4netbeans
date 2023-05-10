@@ -143,6 +143,11 @@ public class AsciidocDataObject extends MultiDataObject {
         return 1;
     }
 
+    /**
+     * Register a multiview source to edit asciidoc file
+     * @param context context lookup
+     * @return instance of MultiViewElement to edit asciidoc file
+     */
     @NbBundle.Messages("Source=&Source")
     @MultiViewElement.Registration(
             displayName="#Source",

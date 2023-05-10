@@ -43,9 +43,9 @@ public final class AsciidocEngineUtils {
     }
 
     /**
-     * Search a best path for base directory
-     * @param asciidoc
-     * @return 
+     * Search a best path for base directory (project, parent file, ...)
+     * @param asciidoc asciidoc file to search best path for base directory
+     * @return best path for base directory
      */
     public static File findBestBaseDirectory(File asciidoc)
     {
@@ -57,9 +57,10 @@ public final class AsciidocEngineUtils {
     }
 
     /**
-     * Search and create the best path for output directorybased on {@link findBestBaseDirectory}.
-     * @param asciidoc
-     * @return 
+     * Search and create the best path for output directory (target/, build/, ...),
+     * based on {@link findBestBaseDirectory}.
+     * @param asciidoc asciidoc file to search best path for output directory
+     * @return best path for output directory
      */
     public static File findBestOutputDirectory(File asciidoc)
     {

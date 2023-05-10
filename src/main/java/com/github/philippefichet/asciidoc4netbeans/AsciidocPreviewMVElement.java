@@ -58,7 +58,8 @@ import org.openide.util.RequestProcessor;
 import org.openide.windows.TopComponent;
 
 /**
- * 
+ * Multiview preview for asciidoc file
+ *
  * @author FICHET Philippe &lt;philippe.fichet@laposte.net&gt;
  */
 @NbBundle.Messages("Preview=&Preview")

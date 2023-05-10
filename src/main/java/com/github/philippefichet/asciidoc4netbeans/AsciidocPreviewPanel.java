@@ -43,17 +43,22 @@ import org.w3c.dom.events.EventTarget;
  *
  * @author FICHET Philippe &lt;philippe.fichet@laposte.net&gt;
  */
-@SuppressWarnings({
-    "java:S1450" // "Private fields used as local variables in methods" disabled because managed by netbeans
-})
 public class AsciidocPreviewPanel extends javax.swing.JPanel {
 
     private static final Logger LOG = Logger.getLogger(AsciidocPreviewPanel.class.getName());
+
+    /**
+     * Reference to WebView create later
+     */
     private final AtomicReference<WebView> webViewReference = new AtomicReference<>();
     private final JFXPanel jfxPanelForBrowser = new JFXPanel();
     private URI currentURI;
     private ChangeListener<Document> currentDOMListener;
-    private Consumer<File> xrefHandler;
+
+    /**
+     * handler for click on XRef/hyperlink
+     */
+    private final Consumer<File> xrefHandler;
 
     static {
         // To avoid closing the JavaFX application when the JFXPanel is closed
@@ -62,6 +67,7 @@ public class AsciidocPreviewPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form AsciidocPreviewPanel
+     * @param xrefHandler handler for click on XRef/hyperlink
      */
     public AsciidocPreviewPanel(Consumer<File> xrefHandler) {
         initComponents();
@@ -148,9 +154,9 @@ public class AsciidocPreviewPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        headPanel = new javax.swing.JPanel();
-        loadingPanel = new javax.swing.JPanel();
-        openInExternalBrowserButton = new javax.swing.JButton();
+        javax.swing.JPanel headPanel = new javax.swing.JPanel();
+        javax.swing.JPanel loadingPanel = new javax.swing.JPanel();
+        javax.swing.JButton openInExternalBrowserButton = new javax.swing.JButton();
         loadginProgressBar = new javax.swing.JProgressBar();
         uriTextField = new javax.swing.JTextField();
 
@@ -228,10 +234,7 @@ public class AsciidocPreviewPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel headPanel;
     private javax.swing.JProgressBar loadginProgressBar;
-    private javax.swing.JPanel loadingPanel;
-    private javax.swing.JButton openInExternalBrowserButton;
     private javax.swing.JTextField uriTextField;
     // End of variables declaration//GEN-END:variables
 }
