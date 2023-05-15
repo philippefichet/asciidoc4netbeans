@@ -29,11 +29,13 @@ import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor;
 import org.jruby.exceptions.LoadError;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author FICHET Philippe &lt;philippe.fichet@laposte.net&gt;
  */
+@ServiceProvider(service = AsciidocEngine.class)
 public class AsciidocEngine {
     private static final Logger LOG = Logger.getLogger(AsciidocEngine.class.getName());
 
@@ -42,10 +44,18 @@ public class AsciidocEngine {
     private final ClassLoader classloader;
     private final List<AsciidocEngineStatusListener> initializationListener = new ArrayList<>();
 
+    /**
+     * Constructor to create engine from Netbeans module
+     * Used to register a ServiceProvider
+     */
     public AsciidocEngine() {
-        classloader = AsciidocEngineUtils.createClassLoaderFromNetbeansModule();
+        this(AsciidocEngineUtils.createClassLoaderFromNetbeansModule());
     }
 
+    /**
+     * Constructor to create engine from an arbitrary classloader
+     * @param classloader class loader used to load AsciidoctorJ
+     */
     public AsciidocEngine(ClassLoader classloader) {
         this.classloader = classloader;
     }
@@ -54,11 +64,18 @@ public class AsciidocEngine {
         return asciidocEngineStatus;
     }
 
+    /**
+     * Add a status listener removed when engine is started
+     * @param listener status listener removed when engine is started
+     */
     public void addEphemeralListener(AsciidocEngineStatusListener listener) {
         initializationListener.add(listener);
         listener.statusChange(asciidocEngineStatus);
     }
 
+    /**
+     * Block thread unil engine is started
+     */
     public void waitingInitialization() {
         while (asciidoctor == null) {
             try {
@@ -94,11 +111,6 @@ public class AsciidocEngine {
         }
     }
 
-    /**
-     * @param content
-     * @param baseDirFolder
-     * @return 
-     */
     public String convert(String content, File baseDirFolder, File outputDirectory, String theme, boolean isDark) {
         if (asciidoctor == null && asciidocEngineStatus == AsciidocEngineStatus.STARTED) {
             return null;

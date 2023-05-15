@@ -34,11 +34,13 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.openide.util.Exceptions;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author FICHET Philippe &lt;philippe.fichet@laposte.net&gt;
  */
+@ServiceProvider(service = HttpServer.class)
 public class HttpServer {
 
     private final Map<String, HttpServerContextConfiguration> contextConfigurations = new ConcurrentHashMap<>();
