@@ -1,0 +1,20 @@
+= Testing
+
+== Diagram
+
+=== PlantUML
+
+[#testing-plantuml]
+.Plant uml demo png (show real file in target/asciidoc4netbeans)
+[plantuml,testing-1-plantuml,png]
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....
+
