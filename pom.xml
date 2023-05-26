@@ -113,7 +113,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <arguments>-Dgpg.passphrase=${gpg.passphrase} -Dgpg.homedir=${gpg.homedir} -Dgpg.useagent=false -Dgpg.executable=${gpg.executable}</arguments>
+                    <arguments>-Dkeystorealias=${keystorealias} -Dkeystore=${keystore} -Dkeystorepass=${keystorepass} -Dgpg.passphrase=${gpg.passphrase} -Dgpg.homedir=${gpg.homedir} -Dgpg.useagent=false -Dgpg.executable=${gpg.executable}</arguments>
                     <goals>clean verify package javadoc:jar gpg:sign install:install deploy:deploy</goals>
                 </configuration>
             </plugin>
