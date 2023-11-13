@@ -19,6 +19,9 @@
  */
 package com.github.philippefichet.asciidoc4netbeans.server;
 
+import com.github.philippefichet.asciidoc4netbeans.AsciidocEngine;
+import com.github.philippefichet.asciidoc4netbeans.AsciidocEngineUtils;
+import com.github.philippefichet.asciidoc4netbeans.AsciidocUtils;
 import io.jooby.AssetHandler;
 import io.jooby.AssetSource;
 import io.jooby.ExecutionMode;
@@ -29,11 +32,20 @@ import io.jooby.ServerOptions;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.commons.codec.binary.Hex;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
+import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -43,7 +55,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = HttpServer.class)
 public class HttpServer {
 
+    private static final RequestProcessor RP = new RequestProcessor(HttpServer.class);
     private final Map<String, HttpServerContextConfiguration> contextConfigurations = new ConcurrentHashMap<>();
+    private final Map<String, RequestProcessor.Task> rps = new ConcurrentHashMap<>();
     private final URI baseURI;
     
     public HttpServer() throws IOException {
@@ -72,12 +86,53 @@ public class HttpServer {
         joobyApp.get("/*/*", ctx -> {
             String path = ctx.getRequestPath();
             for (Map.Entry<String, HttpServerContextConfiguration> entry : contextConfigurations.entrySet()) {
-                String contextName = entry.getKey();
-                if (ctx.getRequestPath().startsWith(contextName)) {
+                String contextName = "/" + entry.getKey();
+                if (path.startsWith(contextName)) {
+                    String pathWithoutContext = path.substring(contextName.length());
                     HttpServerContextConfiguration contextConfiguration = entry.getValue();
-                    if (path.equals(contextName + contextConfiguration.getContentPath())) {
+                    Optional<String> contentByPath = contextConfiguration.getContentByPath(pathWithoutContext);
+                    if (contentByPath.isPresent()) {
                         ctx.setResponseType(MediaType.HTML);
-                        return ctx.send(contextConfiguration.getContent());
+                        return ctx.send(contentByPath.get());
+                    } else if(
+                        pathWithoutContext.endsWith(AsciidocUtils.ADOC_EXTENSION) &&
+                        Paths.get(contextConfiguration.getSourcePath().toString(), pathWithoutContext).toFile().exists()
+                        || pathWithoutContext.endsWith(AsciidocUtils.HTML_EXTENSION) &&
+                        Paths.get(contextConfiguration.getSourcePath().toString(), pathWithoutContext.replace(AsciidocUtils.HTML_EXTENSION, AsciidocUtils.ADOC_EXTENSION)).toFile().exists()
+                    ) {
+                        pathWithoutContext.endsWith(AsciidocUtils.HTML_EXTENSION);
+                        Path resolve = Paths.get(
+                            contextConfiguration.getSourcePath().toString(),
+                                pathWithoutContext.endsWith(AsciidocUtils.HTML_EXTENSION)
+                                ? pathWithoutContext.replace(AsciidocUtils.HTML_EXTENSION, AsciidocUtils.ADOC_EXTENSION)
+                                : pathWithoutContext
+                            );
+                        String absolutePath = resolve.toFile().getAbsolutePath();
+                        RequestProcessor.Task get = rps.get(absolutePath);
+                        if (get == null) {
+                            AsciidocEngine asciidocEngine = Lookup.getDefault().lookup(AsciidocEngine.class);
+                            rps.put(absolutePath, RP.post(() -> {
+                                try {
+                                    contextConfiguration.updateContentByPath(
+                                        pathWithoutContext,
+                                        asciidocEngine.convert(
+                                            Files.readString(resolve),
+                                            contextConfiguration.getSourcePath().toFile(),
+                                            AsciidocEngineUtils.findBestOutputDirectory(resolve.toFile()),
+                                            AsciidocUtils.getCurrentTheme(),
+                                            AsciidocUtils.isDarkLaF()
+                                        )
+                                    );
+                                } catch (Exception ex) {
+                                    Exceptions.printStackTrace(ex);
+                                } finally {
+                                    rps.remove(absolutePath);
+                                }
+                            }));
+                        }
+                        // Loading page
+                        ctx.setResponseType(MediaType.HTML);
+                        return ctx.send(AsciidocUtils.readLoadingPage());
                     } else if (contextConfiguration.getResourcePaths() != null) {
                         for (Path resourcePath : contextConfiguration.getResourcePaths()) {
                             try {
@@ -104,14 +159,36 @@ public class HttpServer {
         return baseURI;
     }
 
-    public void addContext(String contextName, HttpServerContextConfiguration contextConfiguration)
+    public void updateContext(
+        Path sourcePath,
+        List<Path> resourcePaths,
+        String path,
+        String content
+    )
     {
         // Simple overrive change configuration
-        contextConfigurations.put(contextName, contextConfiguration);
+        String contextName = toContext(sourcePath);
+        HttpServerContextConfiguration config = contextConfigurations.get(contextName);
+        if (config == null) {
+            config = new HttpServerContextConfiguration(resourcePaths, sourcePath);
+            contextConfigurations.put(toContext(sourcePath), config);
+        }
+        config.updateContentByPath(path, content);
     }
 
-    public void removeContext(String contextName)
+    public void removeContext(Path sourcePath)
     {
-        contextConfigurations.remove(contextName);
+        contextConfigurations.remove(toContext(sourcePath));
+    }
+
+    public static String toContext(Path sourcePath) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(sourcePath.toFile().getAbsolutePath().getBytes());
+            return Hex.encodeHexString(md.digest());
+        } catch (NoSuchAlgorithmException ex) {
+            Exceptions.printStackTrace(ex);
+            return "nocontext";
+        }
     }
 }

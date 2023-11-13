@@ -32,9 +32,17 @@ import javax.swing.UIManager;
  */
 public final class AsciidocUtils {
 
+    public static final String HTML_EXTENSION = ".html";
+    public static final String ADOC_EXTENSION = ".adoc";
+    private static final String DEFAULT_THEME = "classic";
+
     private static final Logger LOG = Logger.getLogger(AsciidocUtils.class.getName());
 
     private AsciidocUtils() {
+    }
+
+    public static String getCurrentTheme() {
+        return DEFAULT_THEME;
     }
 
     /**

@@ -77,6 +77,15 @@ public class AsciidocPreviewPanel extends javax.swing.JPanel {
             Scene scene  =  new  Scene(borderPane);
             webViewReference.set(new WebView());
             webViewReference.get().autosize();
+            // auto update location
+            webViewReference.get().getEngine().locationProperty()
+            .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                // Only after first load
+                if (!org.openide.util.NbBundle.getMessage(AsciidocPreviewPanel.class, "AsciidocPreviewPanel.uriTextField.text").equals(uriTextField.getText())) {
+                    currentURI = URI.create(newValue);
+                    uriTextField.setText(newValue);
+                }
+            });
             borderPane.setCenter(webViewReference.get());
             jfxPanelForBrowser.setScene(scene);
             if (AsciidocUtils.isDarkLaF()) {

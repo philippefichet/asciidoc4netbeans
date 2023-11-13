@@ -21,7 +21,6 @@ package com.github.philippefichet.asciidoc4netbeans;
 
 import com.github.philippefichet.asciidoc4netbeans.csl.AsciidocLanguageConfig;
 import com.github.philippefichet.asciidoc4netbeans.server.HttpServer;
-import com.github.philippefichet.asciidoc4netbeans.server.HttpServerContextConfiguration;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,6 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -83,8 +81,8 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
     private final AsciidocPreviewPanel asciidocPreviewPanel;
     private final AsciidocDataObject asciidocDataObject;
     private final FileObject primaryFile;
+    private final File primaryFileFile;
     private final HttpServer httpServer;
-    private final String httpServerContextName = "/" + UUID.randomUUID().toString() + "/";
     private final List<Path> httpServerContextPaths = new ArrayList<>();
     private final File baseDirFolder;
     private final File outputDirFolder;
@@ -98,8 +96,9 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
         asciidocDataObject = context.lookup(AsciidocDataObject.class);
         httpServer = Lookup.getDefault().lookup(HttpServer.class);
         primaryFile = asciidocDataObject.getPrimaryFile();
-        baseDirFolder = AsciidocEngineUtils.findBestBaseDirectory(FileUtil.toFile(primaryFile));
-        outputDirFolder = AsciidocEngineUtils.findBestOutputDirectory(FileUtil.toFile(primaryFile));
+        primaryFileFile = FileUtil.toFile(primaryFile);
+        baseDirFolder = AsciidocEngineUtils.findBestBaseDirectory(primaryFileFile);
+        outputDirFolder = AsciidocEngineUtils.findBestOutputDirectory(primaryFileFile);
         httpServerContextPaths.add(baseDirFolder.toPath());
         httpServerContextPaths.add(outputDirFolder.toPath());
         this.updateTask = RP.create(this::doUpdatePreview);
@@ -169,7 +168,7 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
     public void componentClosed() {
         // couper le serveur
         LOG.info("componentClosed");
-        httpServer.removeContext(httpServerContextName);
+        httpServer.removeContext(baseDirFolder.toPath());
     }
 
     @Override
@@ -241,17 +240,25 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
         final StyledDocument localSourceDoc = getSourceDocument();
         if (localSourceDoc != null) {
             final String previewText = renderPreview(localSourceDoc);
-            httpServer.addContext(
-                httpServerContextName,
-                new HttpServerContextConfiguration(
+            String filePath = "/" + baseDirFolder.toPath().relativize(primaryFileFile.toPath()).toString();
+            String filePathForURL = filePath.replace(File.separator, "/");
+            httpServer.updateContext(
+                baseDirFolder.toPath(),
                 httpServerContextPaths,
-                previewText,
-                "index.html"
-            ));
-            URI baseURI = httpServer.getBaseURI().resolve(httpServerContextName);
+                filePathForURL,
+                previewText
+            );
+            httpServer.updateContext(
+                baseDirFolder.toPath(),
+                httpServerContextPaths,
+                filePathForURL.replace(".adoc", ".html"),
+                previewText
+            );
+            String contextName = HttpServer.toContext(baseDirFolder.toPath());
+            URI baseURI = httpServer.getBaseURI().resolve("/" + contextName);
             asciidocPreviewPanel.load(
                 baseURI,
-                baseURI.resolve("index.html"),
+                baseURI.resolve(contextName + filePathForURL),
                 baseDirFolder
             );
             asciidocPreviewPanel.loaded();
@@ -288,6 +295,6 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
             content = ex.getLocalizedMessage();
         }
         AsciidocEngine asciidocEngine = Lookup.getDefault().lookup(AsciidocEngine.class);
-        return asciidocEngine.convert(content, baseDirFolder, outputDirFolder, "classic", AsciidocUtils.isDarkLaF());
+        return asciidocEngine.convert(content, baseDirFolder, outputDirFolder, AsciidocUtils.getCurrentTheme(), AsciidocUtils.isDarkLaF());
     }
 }

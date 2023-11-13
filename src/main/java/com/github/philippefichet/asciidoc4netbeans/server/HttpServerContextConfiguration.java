@@ -20,32 +20,42 @@
 package com.github.philippefichet.asciidoc4netbeans.server;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
  * @author FICHET Philippe &lt;philippe.fichet@laposte.net&gt;
  */
-public class HttpServerContextConfiguration {
+public final class HttpServerContextConfiguration {
     private final List<Path> resourcePaths;
-    private final String content;
-    private final String contentPath;
+    private final Map<String, String> contentByPath = new HashMap<>();
+    private final Path sourcePath;
 
-    public HttpServerContextConfiguration(List<Path> resourcePaths, String content, String contentPath) {
+    public HttpServerContextConfiguration(
+        List<Path> resourcePaths,
+        Path sourcePath
+    ) {
         this.resourcePaths = resourcePaths;
-        this.content = content;
-        this.contentPath = contentPath;
+        this.sourcePath = sourcePath;
     }
 
     public List<Path> getResourcePaths() {
         return resourcePaths;
     }
 
-    public String getContent() {
-        return content;
+    public Path getSourcePath() {
+        return sourcePath;
     }
 
-    public String getContentPath() {
-        return contentPath;
+    public Optional<String> getContentByPath(String path) {
+        return Optional.ofNullable(contentByPath.get(path));
+    }
+
+    public void updateContentByPath(String path, String content)
+    {
+        contentByPath.put(path, content);
     }
 }
