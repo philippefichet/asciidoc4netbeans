@@ -23,5 +23,5 @@ jobs:
         java-version: 11
         distribution: temurin
     - name: Build with Maven
-      run: mvn clean package javadoc:jar verify spotless:check
+      run: mvn clean package source:jar javadoc:jar verify spotless:check
       timeout-minutes: 10
