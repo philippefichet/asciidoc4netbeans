@@ -81,6 +81,10 @@ public class HttpServer {
             .setLastModified(true)
         );
     }
+
+    @SuppressWarnings({
+        "java:S1075" // Remove this hard-coded path-delimiter. Disabled because is required to work
+    })
     private void initContexts(Jooby joobyApp)
     {
         joobyApp.get("/*/*", ctx -> {
@@ -100,7 +104,6 @@ public class HttpServer {
                         || pathWithoutContext.endsWith(AsciidocUtils.HTML_EXTENSION) &&
                         Paths.get(contextConfiguration.getSourcePath().toString(), pathWithoutContext.replace(AsciidocUtils.HTML_EXTENSION, AsciidocUtils.ADOC_EXTENSION)).toFile().exists()
                     ) {
-                        pathWithoutContext.endsWith(AsciidocUtils.HTML_EXTENSION);
                         Path resolve = Paths.get(
                             contextConfiguration.getSourcePath().toString(),
                                 pathWithoutContext.endsWith(AsciidocUtils.HTML_EXTENSION)
@@ -181,6 +184,9 @@ public class HttpServer {
         contextConfigurations.remove(toContext(sourcePath));
     }
 
+    @SuppressWarnings({
+        "java:S4790" // Using weak hashing algorithms is security-sensitive, disabled because is not a sensitive context
+    })
     public static String toContext(Path sourcePath) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

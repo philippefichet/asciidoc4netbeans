@@ -235,6 +235,9 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
         }
     }
 
+    @SuppressWarnings({
+        "java:S1075" // Remove this hard-coded path-delimiter. Disabled because is required to work
+    })
     private void doUpdatePreview() {
         asciidocPreviewPanel.loading();
         final StyledDocument localSourceDoc = getSourceDocument();
