@@ -58,6 +58,7 @@ public class AsciidocLinkEventListener implements EventListener {
             if (href != null
                 && !href.startsWith("#")
                 && !href.startsWith(uri + "#")
+                && !href.replace(AsciidocUtils.HTML_EXTENSION, AsciidocUtils.ADOC_EXTENSION).startsWith(uri + "#")
             ) {
                 evt.stopPropagation();
                 evt.preventDefault();
@@ -66,12 +67,13 @@ public class AsciidocLinkEventListener implements EventListener {
             // xref .adoc in same baseDir/baseURI
             if (href != null
                 && href.startsWith(baseURI)
-                && !href.startsWith(uri)) {
+                && !href.startsWith(uri)
+                && !href.replace(AsciidocUtils.HTML_EXTENSION, AsciidocUtils.ADOC_EXTENSION).startsWith(uri + "#")) {
                 String hrefWithouAnchor = href.split("#")[0];
                 // Search .adoc associed
                 File xrefFile = new File(
                     baseDirFolder,
-                    hrefWithouAnchor.replace(baseURI, "").replace(".html", ".adoc")
+                    hrefWithouAnchor.replace(baseURI, "").replace(AsciidocUtils.HTML_EXTENSION, AsciidocUtils.ADOC_EXTENSION)
                 );
                 if (xrefFile.exists() && xrefFile.isFile()) {
                     linkToFileConsumer.accept(xrefFile);

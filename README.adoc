@@ -1,6 +1,6 @@
 = Asciidoc for Netbeans
 :toc: left
-:toc-title: Sommaire
+:toc-title: Table of content
 :toclevels: 5
 :sectnums: true
 :icons: font
@@ -9,23 +9,37 @@ FICHET Philippe
 
 == Requirement
 
-Java 11 +
+Java 11+ +
 Netbeans 13.0+ +
-Netbeans JavaFX implementation module
+Netbeans JavaFX implementation module +
+xref:#known-issues[Show Known issues]
 
 == Features
 
-- Based on `asciidoctorj`
-- Syntax highlighting (based on TextMate grammar)
-- Preview in Netbeans
-- Support PlantUML diagram
-- Web server to show in browser
-- Follow link to file in Netbeans
-- Dark mode support
-- Show engine status in `Services` tab
-- Search best output directory for rendering
+* Based on `asciidoctorj`
+* Syntax highlighting (based on TextMate grammar)
+* Preview in Netbeans
+* Support PlantUML diagram
+* Web server to show in browser
+** Rendering from the web server when following links
+* Follow link to file in Netbeans
+* Dark mode support
+* Show engine status in `Services` tab
+* Search best output directory for rendering (``target/, build/
 
 == Resources
 
-https://docs.asciidoctor.org/asciidoc/latest/[asciidoc] +
-https://github.com/asciidoctor/asciidoctorj[asciidoctorj] +
+https://docs.asciidoctor.org/asciidoc/latest/[icon:book[] asciidoc] +
+https://github.com/asciidoctor/asciidoctorj[icon:book[] asciidoctorj] +
+
+[#known-issues]
+== Known issues
+
+To work with Netbeans 18 and 19, you need a JDK/JRE including OpenJFX to launch Netbeans. +
+For example, using https://www.azul.com/downloads/?package=jdk-fx#zulu[JDK Zulu].
+
+[WARNING]
+====
+This is due to a Netbeans bug fixed in version 20. +
+It's not possible to correct this with a patch in this extension.
+====
