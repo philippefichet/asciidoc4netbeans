@@ -69,6 +69,9 @@ public class AsciidocPreviewPanel extends javax.swing.JPanel {
      * Creates new form AsciidocPreviewPanel
      * @param xrefHandler handler for click on XRef/hyperlink
      */
+    @SuppressWarnings({
+        "java:S4968" // Replace this type parametrization by the 'final' type `String`. Disable, not applicable on JavaFX API
+    })
     public AsciidocPreviewPanel(Consumer<File> xrefHandler) {
         initComponents();
         this.xrefHandler = xrefHandler;
