@@ -139,11 +139,13 @@ public class HttpServer {
                     } else if (contextConfiguration.getResourcePaths() != null) {
                         for (Path resourcePath : contextConfiguration.getResourcePaths()) {
                             try {
-                                Path resolve = resourcePath.resolve(path.substring(contextName.length()));
-                                File toFile = resolve.toFile();
+                                File toFile = new File(
+                                    resourcePath.toFile(),
+                                    path.substring(contextName.length())
+                                );
                                 if (toFile.isFile() && toFile.exists()) {
                                     // dynamic AssetHandler for caching static files
-                                    AssetHandler assetHandler = new AssetHandler(AssetSource.create(resolve));
+                                    AssetHandler assetHandler = new AssetHandler(AssetSource.create(toFile.toPath()));
                                     return assetHandler.apply(ctx);
                                 }
                             } catch(InvalidPathException ex) {
