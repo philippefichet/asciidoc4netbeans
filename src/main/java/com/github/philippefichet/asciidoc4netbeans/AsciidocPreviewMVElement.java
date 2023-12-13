@@ -25,10 +25,13 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
@@ -243,8 +246,10 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
         final StyledDocument localSourceDoc = getSourceDocument();
         if (localSourceDoc != null) {
             final String previewText = renderPreview(localSourceDoc);
-            String filePath = "/" + baseDirFolder.toPath().relativize(primaryFileFile.toPath()).toString();
-            String filePathForURL = filePath.replace(File.separator, "/");
+            String filePath = baseDirFolder.toPath().relativize(primaryFileFile.toPath()).toString();
+            String filePathForURL = "/" + Stream.of(filePath.replace(File.separator, "/").split("/"))
+                .map(p -> URLEncoder.encode(p, StandardCharsets.UTF_8))
+                .reduce("", (p1,p2) -> p1.isEmpty() ? p2 : p1 + "/" + p2);
             httpServer.updateContext(
                 baseDirFolder.toPath(),
                 httpServerContextPaths,
