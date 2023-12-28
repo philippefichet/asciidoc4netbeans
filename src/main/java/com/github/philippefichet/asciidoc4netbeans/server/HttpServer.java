@@ -32,6 +32,8 @@ import io.jooby.ServerOptions;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -92,7 +94,7 @@ public class HttpServer {
             for (Map.Entry<String, HttpServerContextConfiguration> entry : contextConfigurations.entrySet()) {
                 String contextName = "/" + entry.getKey();
                 if (path.startsWith(contextName)) {
-                    String pathWithoutContext = path.substring(contextName.length());
+                    String pathWithoutContext = URLDecoder.decode(path.substring(contextName.length()), StandardCharsets.UTF_8);
                     HttpServerContextConfiguration contextConfiguration = entry.getValue();
                     Optional<String> contentByPath = contextConfiguration.getContentByPath(pathWithoutContext);
                     if (contentByPath.isPresent()) {
