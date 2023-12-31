@@ -247,19 +247,20 @@ public class AsciidocPreviewMVElement implements MultiViewElement {
         if (localSourceDoc != null) {
             final String previewText = renderPreview(localSourceDoc);
             String filePath = baseDirFolder.toPath().relativize(primaryFileFile.toPath()).toString();
+            String filePathForContext = "/" + filePath;
             String filePathForURL = "/" + Stream.of(filePath.replace(File.separator, "/").split("/"))
                 .map(p -> URLEncoder.encode(p, StandardCharsets.UTF_8))
                 .reduce("", (p1,p2) -> p1.isEmpty() ? p2 : p1 + "/" + p2);
             httpServer.updateContext(
                 baseDirFolder.toPath(),
                 httpServerContextPaths,
-                filePathForURL,
+                filePathForContext,
                 previewText
             );
             httpServer.updateContext(
                 baseDirFolder.toPath(),
                 httpServerContextPaths,
-                filePathForURL.replace(".adoc", ".html"),
+                filePathForContext.replace(".adoc", ".html"),
                 previewText
             );
             String contextName = HttpServer.toContext(baseDirFolder.toPath());
